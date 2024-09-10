@@ -1,83 +1,48 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, Button, Space } from "antd";
-import {
-  BorderHorizontalOutlined,
-  BorderVerticleOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-
-function Partition({ id, onSplit, onDelete, gradient }) {
+const Partition = ({
+  id,
+  direction,
+  color,
+  onSplit,
+  onDelete,
+  onResizeStart,
+  isResizable,
+}) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      style={{ height: "100%", width: "100%" }}
+    <div
+      style={{
+        position: "relative",
+        flexGrow: 1,
+        backgroundColor: color,
+        display: "flex",
+        flexDirection: direction === "horizontal" ? "row" : "column",
+        border: "1px solid #000",
+        minWidth: "50px",
+        minHeight: "50px",
+        resize: isResizable ? "both" : "none", // Enable resizing for top-level nodes
+        overflow: "hidden",
+      }}
     >
-      <Card
-        style={{ background: gradient, height: "100%", width: "100%" }}
-        bodyStyle={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <motion.h2
-          className="text-white text-sm my-3"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            delay: 0.2,
-            duration: 0.5,
-            type: "spring",
-            stiffness: 120,
-          }}
-        >
-          Nested Partition {id}
-        </motion.h2>
-        <Space
+      <div style={{ position: "absolute", top: 5, left: 5 }}>
+        <button onClick={() => onSplit(id, "horizontal")}>H</button>
+        <button onClick={() => onSplit(id, "vertical")}>V</button>
+        <button onClick={() => onDelete(id)}>-</button>
+      </div>
+      {isResizable && (
+        <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
-            flexWrap: "wrap",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            width: "10px",
+            height: "10px",
+            backgroundColor: "black",
+            cursor: "nwse-resize",
           }}
-        >
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <Button
-              type="primary"
-              icon={<BorderHorizontalOutlined />}
-              onClick={() => onSplit(id, "horizontal")}
-            >
-              Split Horizontal
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <Button
-              type="primary"
-              icon={<BorderVerticleOutlined />}
-              onClick={() => onSplit(id, "vertical")}
-            >
-              Split Vertical
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => onDelete(id)}
-            >
-              Remove
-            </Button>
-          </motion.div>
-        </Space>
-      </Card>
-    </motion.div>
+          onMouseDown={(e) => onResizeStart(e, id)}
+        />
+      )}
+    </div>
   );
-}
+};
 
 export default Partition;

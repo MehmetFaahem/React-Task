@@ -41,6 +41,7 @@ const Alphabet = () => {
         flexDirection: "column",
         width: "100vw",
         minHeight: "100vh",
+        overflowX: "hidden",
       }}
     >
       <Title
