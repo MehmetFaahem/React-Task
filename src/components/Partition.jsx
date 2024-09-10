@@ -7,18 +7,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 
-function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
-  const childGradient = React.useMemo(() => {
-    if (parentGradient) {
-      const [color1, color2] = parentGradient.match(
-        /hsl\(\d+,\s*\d+%,\s*\d+%\)/g
-      );
-      const newHue = (parseInt(color1.match(/\d+/)[0]) + 30) % 360;
-      return `linear-gradient(135deg, ${color1}, hsl(${newHue}, 70%, 60%))`;
-    }
-    return gradient;
-  }, [gradient, parentGradient]);
-
+function Partition({ id, onSplit, onDelete, gradient }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
@@ -27,7 +16,7 @@ function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
       style={{ height: "100%", width: "100%" }}
     >
       <Card
-        style={{ background: childGradient, height: "100%", width: "100%" }}
+        style={{ background: gradient, height: "100%", width: "100%" }}
         bodyStyle={{
           height: "100%",
           display: "flex",
@@ -47,7 +36,7 @@ function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
             stiffness: 120,
           }}
         >
-          Partition {id}
+          Nested Partition {id}
         </motion.h2>
         <Space
           style={{
@@ -63,7 +52,7 @@ function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
               icon={<BorderHorizontalOutlined />}
               onClick={() => onSplit(id, "horizontal")}
             >
-              Split H
+              Split Horizontal
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -72,7 +61,7 @@ function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
               icon={<BorderVerticleOutlined />}
               onClick={() => onSplit(id, "vertical")}
             >
-              Split V
+              Split Vertical
             </Button>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -82,7 +71,7 @@ function Partition({ id, onSplit, onDelete, gradient, parentGradient }) {
               icon={<DeleteOutlined />}
               onClick={() => onDelete(id)}
             >
-              Delete
+              Remove
             </Button>
           </motion.div>
         </Space>
